@@ -64,16 +64,10 @@ class MapView {
     this._bubblesG = this._mapG.append('g').attr('class', 'bubbles-g');
     this._labelsG  = this._mapG.append('g').attr('class', 'labels-g');
 
-    /* Zoom */
-    const isMobile = window.innerWidth < 768;
+    /* Zoom — works on all devices. On mobile, touch-action:none on SVG
+       means the browser won't try to scroll, and D3 handles pan/zoom. */
     this._zoom = d3.zoom()
       .scaleExtent([0.6, 8])
-      .filter(e => {
-        /* On mobile: block touch-based zoom/pan so the page can scroll.
-           Still allow programmatic zoom (buttons) and mouse wheel on desktop. */
-        if (isMobile && e.type && e.type.startsWith('touch')) return false;
-        return !e.ctrlKey && !e.button;
-      })
       .on('zoom', e => {
         const t = e.transform;
         this._k = t.k;
@@ -81,11 +75,6 @@ class MapView {
         this._rescaleBubbles(t.k);
       });
     this._svg.call(this._zoom);
-    /* On mobile: let native scroll work, disable D3 wheel listener */
-    if (isMobile) {
-      this._svg.style('touch-action', 'pan-y pinch-zoom');
-      this._svg.on('wheel.zoom', null);  /* remove D3 wheel handler */
-    }
 
     /* Tooltip */
     this._tooltip = document.createElement('div');
