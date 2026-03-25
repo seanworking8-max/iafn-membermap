@@ -81,6 +81,9 @@ class MapView {
     document.body.appendChild(this._tooltip);
 
     window.addEventListener('resize', () => this._onResize());
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => this._onResize(), 100);
+    });
   }
 
   onCountryClick(cb) { this._onClickCb = cb; }
