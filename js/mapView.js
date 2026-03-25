@@ -100,7 +100,7 @@ class MapView {
     if (!this._world) return;
     topojson.feature(this._world, this._world.objects.countries)
       .features.forEach(f => {
-        const c = this._path.centroid(f);
+        const c = MapView._mainCentroid(f, this._path);
         if (c && !isNaN(c[0])) this._centroids.set(+f.id, c);
       });
   }
@@ -185,7 +185,7 @@ class MapView {
     byISO.forEach((info, iso) => {
       const feat = isoFeat.get(iso);
       if (!feat) return;
-      const c = this._path.centroid(feat);
+      const c = MapView._mainCentroid(feat, this._path);
       if (!c || isNaN(c[0])) return;
       entries.push({ iso, info, c });
     });
@@ -284,7 +284,7 @@ class MapView {
       if (!info.hasHQ) return;
       const feat = isoFeat.get(iso);
       if (!feat) return;
-      const c = this._path.centroid(feat);
+      const c = MapView._mainCentroid(feat, this._path);
       if (c && !isNaN(c[0])) hqPoints.push(c);
     });
 
@@ -427,7 +427,27 @@ MapView._numericToISO = (function() {
     776:'TON',780:'TTO',784:'ARE',788:'TUN',792:'TUR',795:'TKM',798:'TUV',
     800:'UGA',804:'UKR',807:'MKD',818:'EGY',826:'GBR',834:'TZA',840:'USA',
     858:'URY',860:'UZB',862:'VEN',882:'WSM',887:'YEM',894:'ZMB',31:'AZE',
-    854:'BFA',630:'PRI',630:'PRI',450:'MDG',
+    854:'BFA',630:'PRI',
   };
   return id => MAP[+id] || null;
 })();
+
+/* ── Use the largest polygon's centroid to avoid bubbles being pulled
+   off-continent by overseas territories (e.g. France, USA, Russia) ── */
+MapView._mainCentroid = function(feat, path) {
+  const g = feat && (feat.geometry || feat);
+  if (!g) return [NaN, NaN];
+  if (g.type !== 'MultiPolygon' || !g.coordinates || g.coordinates.length === 0) {
+    return path.centroid(feat);
+  }
+  // Use path.area() (projected screen area) to pick the largest polygon,
+  // avoiding overseas territories pulling the centroid off-continent
+  let maxArea = -1, bestPoly = null;
+  g.coordinates.forEach(polyCoords => {
+    const poly = { type: 'Polygon', coordinates: polyCoords };
+    const area = Math.abs(path.area(poly));
+    if (area > maxArea) { maxArea = area; bestPoly = poly; }
+  });
+  if (!bestPoly) return path.centroid(feat);
+  return path.centroid(bestPoly);
+};
