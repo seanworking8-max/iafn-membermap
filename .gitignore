@@ -17,3 +17,6 @@
 
 # Scripts folder (local dev only)
 scripts/
+
+# Local Netlify folder
+.netlify

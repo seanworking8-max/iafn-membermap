@@ -47,9 +47,8 @@ class App {
     this._refresh();
     this._updateDataBadge(new Set(this._dm.all().map(r => r.Organization)).size, 'members.csv');
 
-    /* Restore sidebar state */
-    const savedSB = localStorage.getItem('mm_sb') !== 'closed';
-    if (!savedSB) this._closeSidebar();
+    const savedSB = localStorage.getItem("mm_sb");
+    if (savedSB === "closed") this._closeSidebar();
 
     /* Restore last view */
     const savedView = localStorage.getItem('mm_view') || 'map';

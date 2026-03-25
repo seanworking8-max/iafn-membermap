@@ -339,12 +339,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
 
 /* Sidebar Toggle */
 .sb-toggle {
-  width: 30px; height: 30px; display: grid; place-items: center;
+  width: 34px; height: 34px; display: grid; place-items: center;
   border: 1px solid var(--b1); border-radius: var(--r-sm);
-  background: var(--bg-0); color: var(--t2); cursor: pointer;
+  background: var(--bg-2); color: var(--t1); cursor: pointer;
   transition: all var(--fast); flex-shrink: 0;
 }
-.sb-toggle:hover { background: var(--bg-2); color: var(--t0); border-color: var(--b2); }
+.sb-toggle:hover { background: #E8701A; color: #fff; border-color: #E8701A; }
 
 /* ==================== LAYOUT ==================== */
 .layout {
@@ -845,7 +845,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
   border: 1px solid var(--b1); font-weight: 500;
 }
 .dp-close {
-  width: 30px; height: 30px; display: grid; place-items: center;
+  width: 30px; height: 34px; display: grid; place-items: center;
   border: 1px solid var(--b1); border-radius: var(--r-sm);
   background: var(--bg-0); color: var(--t3); cursor: pointer;
   transition: all var(--fast); flex-shrink: 0;
@@ -1331,12 +1331,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
 
 /* Sidebar Toggle */
 .sb-toggle {
-  width: 30px; height: 30px; display: grid; place-items: center;
+  width: 34px; height: 34px; display: grid; place-items: center;
   border: 1px solid var(--b1); border-radius: var(--r-sm);
-  background: var(--bg-0); color: var(--t2); cursor: pointer;
+  background: var(--bg-2); color: var(--t1); cursor: pointer;
   transition: all var(--fast);
 }
-.sb-toggle:hover { background: var(--bg-2); color: var(--t0); }
+.sb-toggle:hover { background: #E8701A; color: #fff; border-color: #E8701A; }
 
 /* ==================== LAYOUT ==================== */
 .layout {
