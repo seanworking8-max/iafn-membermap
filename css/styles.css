@@ -1236,21 +1236,26 @@ button { font-family: inherit; cursor: pointer; border: none; }
     opacity: 1; pointer-events: all;
   }
 
-  /* Main: full width, flex layout */
+  /* Main: scrollable column — user can scroll up to KPIs without the map eating all touches */
   .main {
     display: flex;
     flex-direction: column;
     width: 100%;
-    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* KPI strip: 2×2 grid */
+  /* KPI strip: 2×2 grid — sticky so always visible while scrolling */
   .kpis {
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: auto;
     border-bottom: 1px solid var(--b1);
     flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-0);
   }
   .kpi {
     padding: 10px 12px;
@@ -1269,12 +1274,19 @@ button { font-family: inherit; cursor: pointer; border: none; }
   /* Active filters */
   .active-filters.on { height: 36px; padding: 0 12px; }
 
-  /* Viewport: flex grow to fill */
+  /* Viewport: fixed height so KPI strip above is always reachable */
   .viewport {
-    flex: 1;
+    flex: none;
+    flex-shrink: 0;
     position: relative;
     overflow: hidden;
     width: 100%;
+    height: 58vh;
+  }
+
+  /* When sidebar is open, disable map touches so sidebar can scroll freely */
+  .layout:not(.sb-closed) .viewport {
+    pointer-events: none;
   }
 
   /* Header: tighter */
