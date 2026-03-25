@@ -28,7 +28,7 @@ class MapView {
     const h = this._container.clientHeight || 500;
 
     this._projection = d3.geoNaturalEarth1()
-      .scale(Math.min(w, h) / 5.0)
+      .scale(Math.min(w / 5.4, h / 3.0))
       .translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
 
@@ -98,7 +98,7 @@ class MapView {
        run before layout was painted, falling back to 900×500 defaults) */
     const w = this._container.clientWidth  || 900;
     const h = this._container.clientHeight || 500;
-    this._projection.scale(Math.min(w, h) / 5.0).translate([w / 2, h / 2]);
+    this._projection.scale(Math.min(w / 5.4, h / 3.0)).translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
     /* Reset zoom to identity — fully zoomed out on every device */
     this._svg.transition().duration(0).call(this._zoom.transform, d3.zoomIdentity);
@@ -341,7 +341,7 @@ class MapView {
     const w = this._container.clientWidth;
     const h = this._container.clientHeight;
     if (!w || !h || !this._projection) return;
-    this._projection.scale(Math.min(w, h) / 5.0).translate([w / 2, h / 2]);
+    this._projection.scale(Math.min(w / 5.4, h / 3.0)).translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
     if (this._world) {
       this._buildCentroids();
