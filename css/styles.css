@@ -360,11 +360,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
 /* Sidebar Toggle */
 .sb-toggle {
   width: 34px; height: 34px; display: grid; place-items: center;
-  border: 1px solid var(--b1); border-radius: var(--r-sm);
-  background: var(--bg-2); color: var(--t1); cursor: pointer;
+  border: none; border-radius: var(--r-sm);
+  background: #E8701A; color: #fff; cursor: pointer;
   transition: all var(--fast); flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(232,112,26,.4);
 }
-.sb-toggle:hover { background: #E8701A; color: #fff; border-color: #E8701A; }
+.sb-toggle:hover { background: #c95f12; box-shadow: 0 2px 8px rgba(232,112,26,.5); }
 
 /* ==================== LAYOUT ==================== */
 .layout {
