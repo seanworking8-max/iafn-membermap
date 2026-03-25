@@ -1313,7 +1313,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
   .vs-btn { padding: 4px 10px; font-size: .65rem; }
   .logo-wordmark { font-size: .75rem; }
   .logo-mark, .logo-img { width: 26px; height: 26px; }
-  .sb-toggle { width: 28px; height: 28px; }
+  .sb-toggle { width: 36px; height: 36px; flex-shrink: 0; }
   .data-badge { gap: 4px; padding: 4px 8px; font-size: .62rem; }
 
   /* KPI: 2 columns */
@@ -2242,7 +2242,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
   .vs-btn { padding: 4px 10px; font-size: .65rem; }
   .logo-wordmark { font-size: .75rem; }
   .logo-mark, .logo-img { width: 26px; height: 26px; }
-  .sb-toggle { width: 28px; height: 28px; }
+  .sb-toggle { width: 36px; height: 36px; flex-shrink: 0; }
   .data-badge { gap: 4px; padding: 4px 8px; font-size: .62rem; }
 
   /* KPI: 2 columns */

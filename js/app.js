@@ -50,9 +50,16 @@ class App {
     const savedSB = localStorage.getItem("mm_sb");
     if (savedSB === "closed") {
       this._closeSidebar();
-    } else if (!savedSB && window.innerWidth <= 768) {
-      this._closeSidebar(); /* start closed on mobile first visit */
+    } else if (!savedSB && window.innerWidth < 1024) {
+      this._closeSidebar(); /* start closed on tablet/mobile first visit */
     }
+
+    /* Auto-close sidebar on window resize to mobile */
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 1024 && this._sbOpen) {
+        this._closeSidebar();
+      }
+    });
 
     /* Restore last view */
     const savedView = localStorage.getItem('mm_view') || 'map';
