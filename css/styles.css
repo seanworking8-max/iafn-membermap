@@ -381,7 +381,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .sidebar {
   display: flex; flex-direction: column;
   background: var(--bg-0); border-right: 1px solid var(--b1);
-  overflow: hidden;
+  overflow: hidden; overflow-y: auto;
   transition: opacity var(--slow) var(--ease);
 }
 .layout.sb-closed .sidebar { opacity: 0; pointer-events: none; }
@@ -1240,25 +1240,22 @@ button { font-family: inherit; cursor: pointer; border: none; }
     opacity: 1; pointer-events: all;
   }
 
-  /* Main: scrollable column — user can scroll up to KPIs without the map eating all touches */
+  /* Main: fill remaining space, no scroll past content */
   .main {
     display: flex;
     flex-direction: column;
+    flex: 1;
     width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
   }
 
-  /* KPI strip: 2×2 grid — sticky so always visible while scrolling */
+  /* KPI strip: 2×2 grid */
   .kpis {
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: auto;
     border-bottom: 1px solid var(--b1);
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     background: var(--bg-0);
   }
   .kpi {
@@ -1278,19 +1275,15 @@ button { font-family: inherit; cursor: pointer; border: none; }
   /* Active filters */
   .active-filters.on { height: 36px; padding: 0 12px; }
 
-  /* Viewport: fixed height so page is scrollable */
+  /* Viewport: fill all remaining space below KPIs */
   .viewport {
-    flex: none;
-    flex-shrink: 0;
+    flex: 1;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 55vh;
-    /* Allow page scroll — D3 pan/zoom only via +/- buttons */
-    touch-action: pan-y pan-x;
   }
   .viewport svg {
-    touch-action: pan-y;  /* let vertical swipes scroll the page, not pan the map */
+    touch-action: none;  /* D3 handles map interaction */
   }
 
   /* When sidebar is open, disable map touches so sidebar can scroll freely */
@@ -1299,10 +1292,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
   }
 
   /* Header: tighter */
-  .header { padding: 0 12px; gap: 8px; }
+  .header { padding: 0 10px; gap: 8px; }
   .header-tagline, .header-sep { display: none; }
   .logo-wordmark { font-size: .85rem; }
   .data-badge-dot { display: none; }
+  .sb-toggle { width: 44px; height: 44px; border-radius: 10px; }
+  .sb-toggle svg { width: 18px; height: 18px; }
 
   /* Detail panel: full-width */
   .dp { width: 100%; border-left: none; }
@@ -1331,13 +1326,14 @@ button { font-family: inherit; cursor: pointer; border: none; }
   :root { --hh: 46px; --sw: 88vw; }
 
   /* Header: icon-only for export+theme */
-  .header { padding: 0 10px; gap: 4px; }
+  .header { padding: 0 8px; gap: 6px; }
   .btn-label { display: none; }
   .header-btn { padding: 5px 6px; font-size: .65rem; }
   .vs-btn { padding: 4px 10px; font-size: .65rem; }
   .logo-wordmark { font-size: .75rem; }
-  .logo-mark, .logo-img { width: 26px; height: 26px; }
-  .sb-toggle { width: 36px; height: 36px; flex-shrink: 0; }
+  .logo-mark, .logo-img { width: 24px; height: 24px; }
+  .sb-toggle { width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; }
+  .sb-toggle svg { width: 18px; height: 18px; }
   .data-badge { gap: 4px; padding: 4px 8px; font-size: .62rem; }
 
   /* KPI: 2 columns */
