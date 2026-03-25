@@ -288,13 +288,20 @@ button { font-family: inherit; cursor: pointer; border: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ==================== APP SHELL ==================== */
-.app { display: grid; grid-template-rows: var(--hh) 1fr; height: 100vh; overflow: hidden; }
+.app {
+  display: grid; grid-template-rows: var(--hh) 1fr;
+  height: 100vh;
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--bg-0);
+}
 
 /* ==================== HEADER ==================== */
 .header {
   display: flex; align-items: center;
   padding: 0 16px; gap: 14px;
-  padding-top: env(safe-area-inset-top, 0px);
+
   background: var(--bg-0); border-bottom: 1px solid var(--b1);
   box-shadow: 0 1px 0 var(--b1), var(--s-xs);
   position: relative; z-index: 100;
@@ -373,7 +380,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 /* ==================== LAYOUT ==================== */
 .layout {
   display: grid; grid-template-columns: var(--sw) 1fr;
-  height: calc(100vh - var(--hh)); overflow: hidden;
+  height: calc(100vh - var(--hh) - env(safe-area-inset-top, 0px)); overflow: hidden;
   transition: grid-template-columns var(--slow) var(--ease);
 }
 .layout.sb-closed { grid-template-columns: 0px 1fr; }
@@ -1209,7 +1216,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
     flex-direction: column;
     position: relative;
     width: 100%;
-    height: calc(100vh - var(--hh));
+    height: calc(100vh - var(--hh) - env(safe-area-inset-top, 0px));
     overflow: hidden;
   }
 
