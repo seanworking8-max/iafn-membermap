@@ -41,8 +41,11 @@ class MapView {
       .attr('width', '100%').attr('height', '100%')
       .attr('fill', '#dde8f4');
 
+    /* Main map group (everything that zooms/pans together) */
+    this._mapG = this._svg.append('g').attr('class', 'map-g');
+
     /* Sphere */
-    this._svg.append('path')
+    this._mapG.append('path')
       .datum({ type: 'Sphere' })
       .attr('d', this._path)
       .attr('fill', '#dde8f4')
@@ -50,16 +53,16 @@ class MapView {
       .attr('class', 'sphere-outline');
 
     /* Graticule */
-    this._svg.append('path')
+    this._mapG.append('path')
       .datum(d3.geoGraticule()())
       .attr('d', this._path)
       .attr('class', 'graticule');
 
     /* Layer groups (order matters for stacking) */
-    this._g        = this._svg.append('g').attr('class', 'countries-g');
-    this._arcsG    = this._svg.append('g').attr('class', 'arcs-g');
-    this._bubblesG = this._svg.append('g').attr('class', 'bubbles-g');
-    this._labelsG  = this._svg.append('g').attr('class', 'labels-g');
+    this._g        = this._mapG.append('g').attr('class', 'countries-g');
+    this._arcsG    = this._mapG.append('g').attr('class', 'arcs-g');
+    this._bubblesG = this._mapG.append('g').attr('class', 'bubbles-g');
+    this._labelsG  = this._mapG.append('g').attr('class', 'labels-g');
 
     /* Zoom */
     this._zoom = d3.zoom()
@@ -67,10 +70,7 @@ class MapView {
       .on('zoom', e => {
         const t = e.transform;
         this._k = t.k;
-        this._g.attr('transform', t);
-        this._arcsG.attr('transform', t);
-        this._bubblesG.attr('transform', t);
-        this._labelsG.attr('transform', t);
+        this._mapG.attr('transform', t);
         this._rescaleBubbles(t.k);
       });
     this._svg.call(this._zoom);
