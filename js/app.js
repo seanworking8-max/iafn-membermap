@@ -805,6 +805,7 @@ class App {
     this._sbOpen = false;
     document.querySelector('.layout')?.classList.add('sb-closed');
     localStorage.setItem('mm_sb', 'closed');
+    setTimeout(() => this._map?._onResize(), 380);
   }
 
   /* ─── Event binding ─── */
