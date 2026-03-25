@@ -294,6 +294,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .header {
   display: flex; align-items: center;
   padding: 0 16px; gap: 14px;
+  padding-top: env(safe-area-inset-top, 0px);
   background: var(--bg-0); border-bottom: 1px solid var(--b1);
   box-shadow: 0 1px 0 var(--b1), var(--s-xs);
   position: relative; z-index: 100;
@@ -1205,6 +1206,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
   /* Layout: sidebar overlay + full-width main */
   .layout {
     display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
     height: calc(100vh - var(--hh));
@@ -1283,7 +1285,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
     width: 100%;
   }
   .viewport svg {
-    touch-action: none;  /* D3 handles map interaction */
+    touch-action: pan-y pinch-zoom;  /* allow vertical scroll + pinch zoom, block horizontal pan */
   }
 
   /* When sidebar is open, disable map touches so sidebar can scroll freely */

@@ -81,9 +81,10 @@ class MapView {
         this._rescaleBubbles(t.k);
       });
     this._svg.call(this._zoom);
-    /* On mobile, ensure SVG doesn't block page scroll */
+    /* On mobile: let native scroll work, disable D3 wheel listener */
     if (isMobile) {
-      this._svg.style('touch-action', 'pan-y');
+      this._svg.style('touch-action', 'pan-y pinch-zoom');
+      this._svg.on('wheel.zoom', null);  /* remove D3 wheel handler */
     }
 
     /* Tooltip */
