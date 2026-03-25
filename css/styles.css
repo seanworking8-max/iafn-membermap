@@ -1211,21 +1211,25 @@ button { font-family: inherit; cursor: pointer; border: none; }
     overflow: hidden;
   }
 
-  /* Sidebar: slide-out from left */
+  /* Sidebar: slide-out overlay from left */
   .sidebar {
     position: absolute; top: 0; left: 0; bottom: 0;
     width: var(--sw); z-index: 50;
     height: 100%;
     transform: translateX(0);
-    transition: transform var(--slow) var(--ease);
+    transition: transform var(--slow) var(--ease), opacity var(--slow) var(--ease);
     box-shadow: var(--s-xl);
+    /* Override desktop rules — must be explicit for mobile open state */
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .layout.sb-closed .sidebar {
     transform: translateX(-100%);
-    opacity: 1;
-    pointer-events: none;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
-  .layout.sb-closed .sidebar { opacity: 0; }
 
   /* Backdrop: show when sidebar is open on mobile */
   .sb-backdrop {
@@ -1274,14 +1278,19 @@ button { font-family: inherit; cursor: pointer; border: none; }
   /* Active filters */
   .active-filters.on { height: 36px; padding: 0 12px; }
 
-  /* Viewport: fixed height so KPI strip above is always reachable */
+  /* Viewport: fixed height so page is scrollable */
   .viewport {
     flex: none;
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 58vh;
+    height: 55vh;
+    /* Allow page scroll — D3 pan/zoom only via +/- buttons */
+    touch-action: pan-y pan-x;
+  }
+  .viewport svg {
+    touch-action: pan-y;  /* let vertical swipes scroll the page, not pan the map */
   }
 
   /* When sidebar is open, disable map touches so sidebar can scroll freely */
