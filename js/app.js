@@ -47,17 +47,27 @@ class App {
     this._refresh();
     this._updateDataBadge(new Set(this._dm.all().map(r => r.Organization)).size, 'members.csv');
 
-    const savedSB = localStorage.getItem("mm_sb");
-    if (savedSB === "closed") {
+    /* Sidebar initial state:
+       - Desktop (>=1024px): always open — ignore any stale localStorage value
+       - Mobile/tablet (<1024px): always start closed (overlay behaviour)        */
+    if (window.innerWidth < 1024) {
       this._closeSidebar();
-    } else if (!savedSB && window.innerWidth < 1024) {
-      this._closeSidebar(); /* start closed on tablet/mobile first visit */
+    } else {
+      /* Ensure desktop starts open and clears any stale closed state */
+      this._sbOpen = true;
+      document.querySelector('.layout')?.classList.remove('sb-closed');
+      localStorage.setItem('mm_sb', 'open');
     }
 
-    /* Auto-close sidebar on window resize to mobile */
+    /* Respond to resize: close on mobile, reopen on desktop */
     window.addEventListener('resize', () => {
       if (window.innerWidth < 1024 && this._sbOpen) {
         this._closeSidebar();
+      } else if (window.innerWidth >= 1024 && !this._sbOpen) {
+        this._sbOpen = true;
+        document.querySelector('.layout')?.classList.remove('sb-closed');
+        localStorage.setItem('mm_sb', 'open');
+        setTimeout(() => this._map?._onResize(), 380);
       }
     });
 
