@@ -451,7 +451,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 /* Section title + count */
 .sb-section-title {
   flex: 1; font-size: .72rem; font-weight: 700; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--t2);
+  text-transform: uppercase; color: var(--t1);
   display: flex; align-items: center; gap: 7px; min-width: 0;
 }
 .sb-section-n {
@@ -511,7 +511,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .sb-chip.on .sb-box { background: var(--blue); border-color: var(--blue); }
 .sb-chk { display: none; color: #fff; }
 .sb-chip.on .sb-chk { display: block; }
-.sb-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--t1); }
 .sb-cnt {
   font-size: .62rem; color: var(--t3);
   min-width: 22px; text-align: center;
@@ -549,7 +549,7 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .sb-subsection.has-active .sb-sub-select .sb-subsection-title { color: var(--blue); }
 .sb-subsection-title {
   flex: 1; font-size: .69rem; font-weight: 600; letter-spacing: .02em;
-  color: var(--t2); transition: color var(--fast); white-space: nowrap;
+  color: var(--t1); transition: color var(--fast); white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
 }
 .sb-sub-cnt {
