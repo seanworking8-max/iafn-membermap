@@ -1,0 +1,15 @@
+[build]
+  # No build step — static site
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Force fresh fetches (cache buster is in query string already)
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    # Prevent direct CSV downloads from being cached aggressively
+    Cache-Control = "no-store"

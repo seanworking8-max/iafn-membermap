@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAFN MemberMap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=20" />
+  <script>
+    /* Prevent FOUC — apply saved theme before paint */
+    (function () {
+      const t = localStorage.getItem('mm_theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+
+<body class="app-locked">
+
+<!-- ==================== AUTH GATE ==================== -->
+<div id="auth-screen" class="auth-screen open">
+  <div class="auth-card fade-up">
+    <div class="auth-logo-wrap">
+      <img src="images/iafn-logo-removebg-preview.png" alt="IAFN" class="auth-logo" />
+    </div>
+    <p class="auth-eyebrow">Member Intelligence Platform</p>
+    <h1 class="auth-title">Welcome to<br/>IAFN MemberMap</h1>
+    <form id="auth-form" class="auth-form">
+      <label class="auth-label" for="auth-password">Access Password</label>
+      <input id="auth-password" class="auth-input" type="password"
+             placeholder="Enter password…" autocomplete="current-password" />
+      <button type="submit" class="auth-submit">Sign In →</button>
+      <p id="auth-status" class="auth-status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== LOADING SCREEN ==================== -->
+<div id="loading-screen" class="loading-screen hidden">
+  <div class="loader-content">
+    <div class="loader-globe-wrap">
+      <div class="loader-ring"></div>
+    </div>
+    <div class="loader-text">Loading MemberMap…</div>
+  </div>
+</div>
+
+<!-- ==================== APP SHELL ==================== -->
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button id="sb-toggle" class="sb-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="2.2">
+          <path d="M2 4h12M2 8h12M2 12h12"/>
+        </svg>
+      </button>
+
+      <a href="#" class="logo">
+        <span class="logo-mark">
+          <img src="images/iafn-logo-removebg-preview.png" alt="IAFN" class="logo-img" />
+        </span>
+        <span class="logo-wordmark">MemberMap</span>
+      </a>
+      <span class="header-sep"></span>
+      <span class="header-tagline">Global Intelligence Platform</span>
+    </div>
+
+    <div class="header-center">
+      <div class="view-switcher" role="group" aria-label="View">
+        <div class="vs-indicator"></div>
+        <button class="vs-btn active" data-view="map">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="1.8">
+            <circle cx="8" cy="8" r="6"/>
+            <path d="M2 8h12M8 2c-2 2-3 4-3 6s1 4 3 6M8 2c2 2 3 4 3 6s-1 4-3 6"/>
+          </svg>
+          Map
+        </button>
+        <button class="vs-btn" data-view="table">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="12" height="10" rx="1"/>
+            <path d="M2 7h12M6 7v6"/>
+          </svg>
+          Table
+        </button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="data-badge" class="data-badge" title="Upload new data file">
+        <span class="data-badge-dot"></span>
+        <span id="data-badge-label">Loading…</span>
+      </button>
+      <button id="export-btn" class="header-btn" title="Export CSV (⌘E)">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <path d="M8 2v8M5 7l3 4 3-4M3 12h10"/>
+        </svg>
+        Export
+      </button>
+      <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode (⌘D)">
+        <svg class="icon-moon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <path d="M13 10a6 6 0 11-7-7 4.5 4.5 0 007 7z"/>
+        </svg>
+        <svg class="icon-sun" width="14" height="14" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="1.8" style="display:none">
+          <circle cx="8" cy="8" r="3"/>
+          <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- BODY LAYOUT -->
+  <div class="layout" id="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <!-- Search box -->
+      <div class="sb-search">
+        <span class="sb-search-icon">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <circle cx="7" cy="7" r="4.5"/>
+            <path d="M11 11l2.5 2.5"/>
+          </svg>
+        </span>
+        <input id="sb-search" class="sb-input" type="search"
+               placeholder="Search organizations…" autocomplete="off" />
+        <span class="sb-kbd">⌘K</span>
+      </div>
+
+      <!-- Filter sections injected by _buildFilters() -->
+      <div class="sb-scroll"></div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- KPI strip — injected by _buildKPIs() -->
+      <div class="kpis"></div>
+
+      <!-- Active filters bar -->
+      <div class="active-filters" id="active-filters"></div>
+
+      <!-- Viewport -->
+      <div class="viewport">
+
+        <!-- Map panel -->
+        <div id="map-panel" class="view-panel active">
+          <div id="map-container" class="map-container"></div>
+
+          <!-- Map controls -->
+          <div class="map-controls">
+            <button id="zoom-in" class="mc-btn" title="Zoom in">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+                   stroke="currentColor" stroke-width="2.5">
+                <path d="M8 3v10M3 8h10"/>
+              </svg>
+            </button>
+            <button id="zoom-out" class="mc-btn" title="Zoom out">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+                   stroke="currentColor" stroke-width="2.5">
+                <path d="M3 8h10"/>
+              </svg>
+            </button>
+            <div class="mc-sep"></div>
+            <button id="zoom-reset" class="mc-btn" title="Reset zoom">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <path d="M2 8a6 6 0 016-6 6 6 0 014.2 1.7L14 5.5"/>
+                <path d="M14 2v4h-4"/>
+              </svg>
+            </button>
+            <div class="mc-sep"></div>
+            <button id="arc-btn" class="mc-btn" title="Toggle connection arcs">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <path d="M2 14C4 8 8 4 14 2"/>
+                <circle cx="2" cy="14" r="1.5" fill="currentColor" stroke="none"/>
+                <circle cx="14" cy="2" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Legend — presence rows are static; commodity rows injected by _buildLegend() -->
+          <div class="map-legend"></div>
+
+          <!-- Keyboard hint -->
+          <div class="kb-hint">
+            <span class="kb-key">Click</span> a country for details&nbsp;
+            <span class="kb-key" style="margin-left:4px">Esc</span> close
+          </div>
+        </div>
+
+        <!-- Table panel -->
+        <div id="table-panel" class="view-panel">
+          <div id="table-container" class="table-wrapper"></div>
+        </div>
+
+      </div><!-- /viewport -->
+    </main><!-- /main -->
+  </div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- ==================== DETAIL PANEL ==================== -->
+<div id="dp-overlay" class="dp-overlay"></div>
+<div id="dp" class="dp">
+  <div class="dp-head">
+    <div class="dp-title">
+      <div id="dp-flag" class="dp-flag"></div>
+      <div>
+        <div id="dp-country" class="dp-country"></div>
+        <div id="dp-region"  class="dp-region"></div>
+      </div>
+    </div>
+    <button id="dp-close" class="dp-close" aria-label="Close detail panel">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none"
+           stroke="currentColor" stroke-width="2.2">
+        <path d="M3 3l10 10M13 3L3 13"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="dp-kpis">
+    <div class="dp-kpi">
+      <div id="dp-kpi-orgs"     class="dp-kpi-val">—</div>
+      <div class="dp-kpi-lbl">Orgs</div>
+    </div>
+    <div class="dp-kpi">
+      <div id="dp-kpi-eng"      class="dp-kpi-val">—</div>
+      <div class="dp-kpi-lbl">Engagements</div>
+    </div>
+    <div class="dp-kpi">
+      <div id="dp-kpi-indirect" class="dp-kpi-val">—</div>
+      <div class="dp-kpi-lbl">Indirect</div>
+    </div>
+  </div>
+
+  <div id="dp-chart" class="dp-chart"></div>
+  <div id="dp-body"  class="dp-body"></div>
+</div>
+
+<!-- ==================== UPLOAD MODAL ==================== -->
+<div id="upload-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Upload New Data</div>
+        <div class="modal-sub">Replace the dashboard data with an Excel or CSV file.<br/>
+          Columns must match the standard schema.</div>
+      </div>
+      <button id="modal-close" class="modal-close" aria-label="Close">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="2.2">
+          <path d="M3 3l10 10M13 3L3 13"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="drop-zone" class="drop-zone">
+      <input id="file-input" type="file" accept=".xlsx,.xls,.csv" class="dz-input" />
+      <div class="dz-icon">📂</div>
+      <div class="dz-title">Drop your file here</div>
+      <div class="dz-sub">or <span>browse to upload</span></div>
+    </div>
+
+    <div id="upload-status" class="upload-status" style="display:none"></div>
+
+    <div class="schema-hint">
+      <div class="schema-hint-title">Required columns</div>
+      <div class="schema-cols">
+        <span class="schema-col required">Organization</span>
+        <span class="schema-col required">Country</span>
+        <span class="schema-col required">ISO_Alpha3</span>
+        <span class="schema-col required">Presence_Type</span>
+        <span class="schema-col">Region</span>
+        <span class="schema-col">Scope</span>
+        <span class="schema-col">Value_Chain</span>
+        <span class="schema-col">Commodity</span>
+        <span class="schema-col">Member_Type</span>
+        <span class="schema-col">Engagements</span>
+        <span class="schema-col">Website</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TOAST STACK ==================== -->
+<div id="toast-stack" class="toast-stack"></div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<!-- CDN libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<!-- App modules -->
+<script src="js/utils.js?v=20"></script>
+<script src="js/dataManager.js?v=20"></script>
+<script src="js/mapView.js?v=20"></script>
+<script src="js/tableView.js?v=20"></script>
+<script src="js/excelParser.js?v=20"></script>
+<script src="js/app.js?v=20"></script>
+
+</body>
+</html>
