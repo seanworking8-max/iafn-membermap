@@ -28,7 +28,7 @@ class MapView {
     const h = this._container.clientHeight || 500;
 
     this._projection = d3.geoNaturalEarth1()
-      .scale(w / 5.6)
+      .scale(Math.min(w, h) / 5.0)
       .translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
 
@@ -63,7 +63,7 @@ class MapView {
 
     /* Zoom */
     this._zoom = d3.zoom()
-      .scaleExtent([0.5, 12])
+      .scaleExtent([0.6, 8])
       .on('zoom', e => {
         const t = e.transform;
         this._k = t.k;
@@ -93,6 +93,8 @@ class MapView {
     const resp  = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json');
     this._world = await resp.json();
     this._buildCentroids();
+    /* Reset zoom to fit world */
+    this._svg.transition().duration(0).call(this._zoom.transform, d3.zoomIdentity);
     this._drawCountries();
     this.update(this._dm.filtered());
   }
