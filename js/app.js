@@ -48,7 +48,11 @@ class App {
     this._updateDataBadge(new Set(this._dm.all().map(r => r.Organization)).size, 'members.csv');
 
     const savedSB = localStorage.getItem("mm_sb");
-    if (savedSB === "closed") this._closeSidebar();
+    if (savedSB === "closed") {
+      this._closeSidebar();
+    } else if (!savedSB && window.innerWidth <= 768) {
+      this._closeSidebar(); /* start closed on mobile first visit */
+    }
 
     /* Restore last view */
     const savedView = localStorage.getItem('mm_view') || 'map';
@@ -814,6 +818,9 @@ class App {
 
     /* Sidebar toggle (header) */
     document.getElementById('sb-toggle')?.addEventListener('click', () => this._toggleSidebar());
+
+    /* Mobile backdrop — tap to close sidebar */
+    document.getElementById('sb-backdrop')?.addEventListener('click', () => this._closeSidebar());
 
     /* Export */
     document.getElementById('export-btn')?.addEventListener('click', () => this._exportCSV());

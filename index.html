@@ -6,7 +6,7 @@
   <title>IAFN MemberMap</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=29" />
+  <link rel="stylesheet" href="css/styles.css?v=30" />
   <script>
     /* Prevent FOUC — apply saved theme before paint */
     (function () {
@@ -101,7 +101,7 @@
              stroke="currentColor" stroke-width="1.8">
           <path d="M8 2v8M5 7l3 4 3-4M3 12h10"/>
         </svg>
-        Export
+        <span class="btn-label">Export</span>
       </button>
       <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode (⌘D)">
         <svg class="icon-moon" width="14" height="14" viewBox="0 0 16 16" fill="none"
@@ -119,6 +119,9 @@
 
   <!-- BODY LAYOUT -->
   <div class="layout" id="layout">
+
+    <!-- Mobile overlay backdrop (closes sidebar when tapped) -->
+    <div id="sb-backdrop" class="sb-backdrop"></div>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -303,12 +306,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <!-- App modules -->
-<script src="js/utils.js?v=29"></script>
-<script src="js/dataManager.js?v=29"></script>
-<script src="js/mapView.js?v=29"></script>
-<script src="js/tableView.js?v=29"></script>
-<script src="js/excelParser.js?v=29"></script>
-<script src="js/app.js?v=29"></script>
+<script src="js/utils.js?v=30"></script>
+<script src="js/dataManager.js?v=30"></script>
+<script src="js/mapView.js?v=30"></script>
+<script src="js/tableView.js?v=30"></script>
+<script src="js/excelParser.js?v=30"></script>
+<script src="js/app.js?v=30"></script>
 
 </body>
 </html>
