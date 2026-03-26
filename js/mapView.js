@@ -100,6 +100,9 @@ class MapView {
     const h = this._container.clientHeight || 500;
     this._projection.scale(Math.min(w / 5.4, h / 3.0)).translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
+    /* Update sphere and graticule to match recalculated projection */
+    this._mapG.select('.sphere-outline').attr('d', this._path({type:'Sphere'}));
+    this._mapG.select('.graticule').attr('d', this._path(d3.geoGraticule()()));
     /* Reset zoom to identity — fully zoomed out on every device */
     this._svg.transition().duration(0).call(this._zoom.transform, d3.zoomIdentity);
     this._drawCountries();
@@ -343,6 +346,9 @@ class MapView {
     if (!w || !h || !this._projection) return;
     this._projection.scale(Math.min(w / 5.4, h / 3.0)).translate([w / 2, h / 2]);
     this._path = d3.geoPath(this._projection);
+    /* Update sphere and graticule paths to match new projection */
+    this._mapG.select('.sphere-outline').attr('d', this._path({type:'Sphere'}));
+    this._mapG.select('.graticule').attr('d', this._path(d3.geoGraticule()()));
     if (this._world) {
       this._buildCentroids();
       this._drawCountries();

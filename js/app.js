@@ -314,10 +314,42 @@ class App {
     sb.querySelectorAll('.sb-section-expand').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const hd   = btn.closest('.sb-section-hd');
-        const body = hd.nextElementSibling;
+        const hd      = btn.closest('.sb-section-hd');
+        const section = btn.closest('.sb-section');
+        const body    = hd.nextElementSibling;
+        const willOpen = btn.classList.contains('coll');
         btn.classList.toggle('coll');
         if (body) body.classList.toggle('coll');
+
+        /* Mobile: when collapsing a section, also collapse all its subsections.
+           When expanding, collapse all OTHER sections (accordion). */
+        if (window.innerWidth < 1024) {
+          if (!willOpen) {
+            /* Collapsing: close all subsections inside */
+            section.querySelectorAll('.sb-sub-expand').forEach(sb => {
+              if (!sb.classList.contains('coll')) sb.classList.add('coll');
+            });
+            section.querySelectorAll('.sb-subsection-body').forEach(b => {
+              if (!b.classList.contains('coll')) b.classList.add('coll');
+            });
+          } else {
+            /* Expanding: collapse every OTHER section (accordion) */
+            document.querySelectorAll('.sb-section').forEach(other => {
+              if (other === section) return;
+              const otherBtn  = other.querySelector('.sb-section-expand');
+              const otherBody = other.querySelector('.sb-section-body');
+              if (otherBtn && !otherBtn.classList.contains('coll')) otherBtn.classList.add('coll');
+              if (otherBody && !otherBody.classList.contains('coll')) otherBody.classList.add('coll');
+              /* Also collapse subsections in other sections */
+              other.querySelectorAll('.sb-sub-expand').forEach(sb => {
+                if (!sb.classList.contains('coll')) sb.classList.add('coll');
+              });
+              other.querySelectorAll('.sb-subsection-body').forEach(b => {
+                if (!b.classList.contains('coll')) b.classList.add('coll');
+              });
+            });
+          }
+        }
       });
     });
 
